@@ -63,7 +63,7 @@
 
                 <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small mx-lg-auto">
                     <li>
-                        <a href="#" class="nav-link text-white">
+                        <a href="/" class="nav-link text-white">
                             Dashboard
                         </a>
                     </li>

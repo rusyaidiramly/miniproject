@@ -80,7 +80,7 @@ window.onload = function () {
                         <tr><td class="pe-2"><strong>Created Date:</strong></td><td>${userData[3].innerHTML}</tr></td></table>`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    deleteUser(`api/users/${userId}`).then((data) => {
+                    deleteUser(`/api/users/${userId}`).then((data) => {
                         if (data.success){
                             rowElement.remove();
                             Swal.fire(`Delete Success`, "", "success");
