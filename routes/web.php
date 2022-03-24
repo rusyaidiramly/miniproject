@@ -27,7 +27,12 @@ Route::get('/userlist', function () {
 });
 Route::get('/userlist/search', function (Request $request) {
     if($request->q=='') return redirect('/userlist');
-    return view('userlist', ['users' => UserController::search($request->q)]);
+    return view('userlist', ['users' => UserController::search($request->q), 'searchStr' => $request->q]);
 });
 
 Route::post('/', [UserController::class, 'login']);
+Route::post('/register', function (Request $request) {
+    UserController::store($request);
+    UserController::login($request);
+    return redirect('/');
+});

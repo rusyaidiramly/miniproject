@@ -14,9 +14,8 @@
         <div class="search-form">
             <form id="search-form" action="/userlist/search" method="GET"
                 class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-flex w-100">
-                {{-- @csrf --}}
                 <input type="search" name="q" class="form-control form-control-light" placeholder="Name or Email"
-                    aria-label="Search">
+                    aria-label="Search" value="{{isset($searchStr)? $searchStr:''}}">
                 <button type="submit" class="btn btn-primary ms-2"><a class="text-muted" href="#"><svg class="bi" width="18"
                     height="18">
                     <use xlink:href="#search-icon"></use>
