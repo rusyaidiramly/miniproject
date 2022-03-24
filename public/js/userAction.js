@@ -16,6 +16,31 @@ async function postData(url = "", data = {}) {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
+async function editUser(url = "", data = {}) {
+    var formBody = [];
+    for (var property in data) {
+        var encodedKey = encodeURIComponent(property);
+        var encodedValue = encodeURIComponent(data[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+    const response = await fetch(url, {
+        method: "PUT",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+            url: url,
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: formBody,
+    });
+    return response.json();
+}
+
 async function deleteUser(url = "") {
     const response = await fetch(url, {
         method: "DELETE",
@@ -31,22 +56,6 @@ async function deleteUser(url = "") {
     return response.json();
 }
 
-function confirmPopup() {
-    Swal.fire({
-        title: "title",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonText: "Save",
-        denyButtonText: `Don't save`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire("Saved!", "", "success");
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
-        }
-    });
-}
-
 window.onload = function () {
     editBtns = document.querySelectorAll(".action-edit");
     deleteBtns = document.querySelectorAll(".action-delete");
@@ -54,7 +63,46 @@ window.onload = function () {
     editBtns.forEach((editBtn) => {
         editBtn.addEventListener("click", function (e) {
             e.preventDefault();
-            console.log(this.getAttribute("data-id"));
+            userId = this.getAttribute("data-id");
+            rowElement = this.closest("tr");
+            userData = rowElement.children;
+            Swal.fire({
+                title: `Edit user: ${userId}`,
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                confirmButtonColor: "#198754",
+                html: `<div class="container">
+                <form>
+                <div class="form-group mb-2">
+                    <label for="swal-input-email" style="float:left">Email</label>
+                    <input type="email" class="form-control" id="swal-input-email" value="${userData[2].innerHTML}" placeholder="Email">
+                </div>
+                <div class="form-group mb-2">
+                    <label for="swal-input-name" style="float:left">Full name</label>
+                    <input type="text" class="form-control" id="swal-input-name"  value="${userData[1].innerHTML}" placeholder="Name">
+                </div>
+                </form>
+                </div>`,
+                preConfirm: () => {
+                    return {
+                        name: document.getElementById("swal-input-name").value,
+                        email: document.getElementById("swal-input-email").value,
+                    };
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    editUser(`/api/users/${userId}`, result.value).then(
+                        (data) => {
+                            if (data.success) {
+                                userData[1].innerHTML = result.value.name;
+                                userData[2].innerHTML = result.value.email;
+                                Swal.fire(`Edit Saved`, "", "success");
+                            }
+                        }
+                    );
+                }
+            });
         });
     });
 
@@ -70,7 +118,7 @@ window.onload = function () {
                 showDenyButton: false,
                 showCancelButton: true,
                 confirmButtonText: "Delete",
-                confirmButtonColor: '#d33',
+                confirmButtonColor: "#d33",
                 timer: 5000,
                 timerProgressBar: true,
                 denyButtonText: ``,
@@ -81,7 +129,7 @@ window.onload = function () {
             }).then((result) => {
                 if (result.isConfirmed) {
                     deleteUser(`/api/users/${userId}`).then((data) => {
-                        if (data.success){
+                        if (data.success) {
                             rowElement.remove();
                             Swal.fire(`Delete Success`, "", "success");
                         }

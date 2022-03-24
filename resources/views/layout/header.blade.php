@@ -81,7 +81,7 @@
                 <div class="dropdown text-end d-flex">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                        <img src="/img/user-icon.png" alt="mdo" width="32" height="32" class="rounded-circle">
                         <span class="pt-1 ms-2">{{Session::get('usersession')->name}}</span>
                     </a>
                     <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">

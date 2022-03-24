@@ -27,11 +27,10 @@
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col" class="d-none d-sm-table-cell">#</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Email Address</th>
-                        <th scope="col">Created Date</th>
-                        <th scope="col">Action</th>
+                        <th scope="col" colspan="2">Created Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,12 +39,12 @@
 @endif
 @foreach ($users as $user)
     <tr>
-        <td class="align-middle">{{ $loop->iteration }}</td>
+        <td class="align-middle d-none d-sm-table-cell">{{ $loop->iteration }}</td>
         <td class="align-middle">{{ $user->name }}</td>
         <td class="align-middle">{{ $user->email }}</td>
         <td class="align-middle">{{ date('D, d F Y', strtotime($user->created_at)) }}</td>
-        <td class="align-middle">
-            <button class="action-edit btn btn-primary" data-id="{{ $user->id }}">
+        <td class="align-middle d-flex flex-col flex-sm-row">
+            <button class="action-edit btn btn-primary ms-auto" data-id="{{ $user->id }}">
                 <a class="text-muted" href="#"><svg class="bi" width="18"
                     height="18">
                     <use xlink:href="#edit-icon"></use>
