@@ -9,9 +9,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        return User::all();
         // return $row ? User::all()->paginate($rows) : User::all();
-        return User::jsonPaginate();
+        return User::jsonPaginate(7);
     }
 
     public function store(Request $request)
@@ -21,7 +20,12 @@ class UserController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-        return User::create($request->all());
+        $user = User::create($request->all());
+        if (!$user) {
+            return response()->json(['success' => false], 500);
+        } else {
+            return response()->json(['success' => true], 200);
+        }
     }
 
     public function show($id)
@@ -54,21 +58,20 @@ class UserController extends Controller
     {
         return User::where('name', 'like', '%' . $nameOrEmail . '%')
             ->orWhere('email', 'like', '%' . $nameOrEmail . '%')
-            ->jsonPaginate();
-            ;
+            ->jsonPaginate(7);
     }
 
-    public function login(Request $req)
+    public function login(Request $request)
     {
-        $user = User::where(['email' => $req->email])
-            ->where(['password' => $req->password])->first();
+        $user = User::where(['email' => $request->email])
+            ->where(['password' => $request->password])->first();
 
         if (!$user) {
             return response()->json([
                 'success' => false, 'message' => 'Username or passowrd is not matched',
             ], 500);
         } else {
-            $req->session()->put('usersession', $user);
+            $request->session()->put('usersession', $user);
             return view('dashboard');
         }
     }

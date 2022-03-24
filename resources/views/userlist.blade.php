@@ -6,11 +6,18 @@
     <script src="/js/swal/sweetalert2.all.min.js"></script>
 @endsection
 @section('bodyDependencies')
-    <script src="js/userAction.js"></script>
+    <script src="/js/userAction.js"></script>
     <script src="/js/swal/sweetalert2.min.js"></script>
 @endsection
 @section('content')
     <div class="container mt-4">
+        <div class="search-form">
+            <form id="search-form" action="/userlist/search" method="GET" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-flex w-100">
+                {{-- @csrf --}}
+                <input type="search" name="q" class="form-control form-control-light" placeholder="Name or Email" aria-label="Search">
+                <button type="submit" class="btn btn-primary ms-2">Search</button>
+            </form>
+        </div>
         <div class="table-responsive">
             <table class="table table-striped table-sm">
                 <thead>
@@ -23,19 +30,28 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if (count($users) == 0)
+                        <tr>
+                            <td colspan=5 class="align-middle text-center">
+                                No user
+                            </td>
+                        </tr>
+                    @endif
                     @foreach ($users as $user)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ date('D, d F Y', strtotime($user->created_at)) }}</td>
-                            <td><button class="action-edit" data-id="{{ $user->id }}">Edit</button>
-                                <button class="action-delete" data-id="{{ $user->id }}"">Delete</button>
-                                </td>
-                             </tr>
-                    @endforeach
+                            <td class="align-middle">{{ $loop->iteration }}</td>
+                            <td class="align-middle">{{ $user->name }}</td>
+                            <td class="align-middle">{{ $user->email }}</td>
+                            <td class="align-middle">{{ date('D, d F Y', strtotime($user->created_at)) }}</td>
+                            <td class="align-middle"><button class="action-edit btn btn-primary"
+                                    data-id="{{ $user->id }}">Edit</button>
+                                <button class="action-delete btn btn-danger" data-id="{{ $user->id }}"">Delete</button>
+                                    </td>
+                                 </tr>
+     @endforeach
                 </tbody>
             </table>
+            {{ $users->links('vendor.pagination.bootstrap-4') }}
         </div>
     </div>
 @endsection

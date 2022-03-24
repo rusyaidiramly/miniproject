@@ -62,7 +62,8 @@ window.onload = function () {
         deleteBtn.addEventListener("click", function (e) {
             e.preventDefault();
             userId = this.getAttribute("data-id");
-            userData = this.closest("tr").children;
+            rowElement = this.closest("tr");
+            userData = rowElement.children;
             Swal.fire({
                 icon: "warning",
                 title: `Delete user: ${userId}`,
@@ -80,8 +81,10 @@ window.onload = function () {
             }).then((result) => {
                 if (result.isConfirmed) {
                     deleteUser(`api/users/${userId}`).then((data) => {
-                        if (data.success)
+                        if (data.success){
+                            rowElement.remove();
                             Swal.fire(`Delete Success`, "", "success");
+                        }
                     });
                 }
             });

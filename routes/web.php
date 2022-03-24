@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     if (Session::has('usersession')) {
@@ -10,16 +11,23 @@ Route::get('/', function () {
         return view('home');
     }
 });
+Route::get('/register', function () {
+    if (Session::has('usersession')) {
+        return redirect('/');
+    } else {
+        return view('register');
+    }
+});
 Route::get('/logout', function () {
     Session::forget('usersession');
     return redirect('/');
 });
 Route::get('/userlist', function () {
-// $client = new GuzzleHttp\Client();
-    // $res = $client->get(asset('api/users'));
-    // return $res->getBody();
-    $recordPaginate=2;
-    return view('userlist', ['users' => UserController::index($recordPaginate=2)]);
+    return view('userlist', ['users' => UserController::index()]);
+});
+Route::get('/userlist/search', function (Request $request) {
+    if($request->q=='') return redirect('/userlist');
+    return view('userlist', ['users' => UserController::search($request->q)]);
 });
 
 Route::post('/', [UserController::class, 'login']);
