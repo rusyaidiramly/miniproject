@@ -1,4 +1,4 @@
-1. Create empty folder & cd into the created folder
+1. create empty folder & cd into the created folder
 2. cmd: git clone https://github.com/rusyaidiramly/miniproject.git
 3. cmd: code miniproject
 4. vscode terminal: copy .env.example .env
