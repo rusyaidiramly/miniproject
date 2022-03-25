@@ -138,6 +138,27 @@ window.onload = function () {
             });
         });
     });
+
+    updateSubmit = document.getElementById("updateProfile");
+
+    updateSubmit.addEventListener("click", function (e) {
+        e.preventDefault();
+        userId = this.getAttribute("data-id");
+        rowElement = this.closest(".card");
+        userData = rowElement.children;
+        console.log(userData[1].children.email.value);
+        editUser(`/api/users/${userId}`, {
+            email:userData[1].children.email.value,
+            name:userData[2].children.name.value,
+            password:userData[3].children.password.value,
+            }).then(
+            (data) => {
+                if (data.success) {
+                    Swal.fire(`Edit Saved`, "", "success");
+                }
+            }
+        );
+    });
 };
 
 //   postData('https://example.com/answer', { answer: 42 })

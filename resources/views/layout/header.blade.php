@@ -68,7 +68,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link text-white">
+                        <a href="/profile" class="nav-link text-white">
                             My Profile
                         </a>
                     </li>

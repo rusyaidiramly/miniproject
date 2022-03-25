@@ -25,6 +25,9 @@ Route::get('/logout', function () {
 Route::get('/userlist', function () {
     return view('userlist', ['users' => UserController::index()]);
 });
+Route::get('/profile', function () {
+    return view('profile', ['user' => UserController::show(Session::get('usersession')->id)]);
+});
 Route::get('/userlist/search', function (Request $request) {
     if($request->q=='') return redirect('/userlist');
     return view('userlist', ['users' => UserController::search($request->q), 'searchStr' => $request->q]);
